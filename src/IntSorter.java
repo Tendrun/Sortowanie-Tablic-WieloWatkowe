@@ -3,11 +3,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class IntSorter {
-    //numbers to sort
-    int[] array;
     //Threads
+    int[] array;
     int threadscount;
-    int[] numbperthread;
+    int[] numbpersthread;
     List<ThreadCounter> threadCounters;
     PairManager pairmanager;
 
@@ -16,8 +15,26 @@ public class IntSorter {
         array = arr;
         this.threadscount = threadscount;
         threadCounters = new ArrayList<ThreadCounter>();
-        numbperthread = new int[threadscount];
-                //array.length/threadscount;
+        numbpersthread = SetEqualArray(arr.length, threadscount);
+    }
+
+    //sort thread equally per thread
+    int[] SetEqualArray(int NumbersCount, int ThreadCount) {
+
+        int Equal = NumbersCount / ThreadCount;
+        int rest = NumbersCount % ThreadCount;
+        int[] array = new int[ThreadCount];
+
+        for (int i = 0; i < array.length; i++) {
+            array[i] = Equal;
+
+            if(rest > 0) {
+                array[i]++;
+                rest--;
+            }
+        }
+
+        return array;
     }
 
     //Create threads
@@ -26,8 +43,8 @@ public class IntSorter {
     public void StartSorting() {
         for (int i = 0; i < threadscount; i++) {
 
-            int[] arrtothread = Arrays.copyOfRange(array, firstindex, firstindex + numbperthread[i]);
-            firstindex += numbperthread[i];
+            int[] arrtothread = Arrays.copyOfRange(array, firstindex, firstindex + numbpersthread[i]);
+            firstindex += numbpersthread[i];
 
             threadCounters.add(new ThreadCounter(arrtothread, "Thread " + i));
             threadCounters.get(i).start();
