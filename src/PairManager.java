@@ -1,17 +1,58 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class PairManager {
-    ThreadCountPair[] threadsCountPair;
 
-    public void makepairs(ThreadCounter[] threadCounters) {
+    public List<ThreadCountPair> makepairs(List<ThreadCounter> threadCounters) {
 
-        threadsCountPair = new ThreadCountPair[(int)Math.ceil(threadCounters.length / 2.0)];
+        List<ThreadCountPair> threadsCountPair = new ArrayList<ThreadCountPair>();
 
-        for(int i = 0; i < threadCounters.length; i++){
-            if(i + 1 < threadCounters.length){
-                threadsCountPair[i] = new ThreadCountPair();
-                threadsCountPair[i].thread1 = threadCounters[i];
-                threadsCountPair[i].thread2 = threadCounters[i];
+        for(int i = 0; i < threadCounters.size(); i++) {
+            if (threadCounters.get(i).finished || threadCounters.get(i).haspair)
+                continue;
+
+
+            ThreadCounter currentthread = threadCounters.get(i);
+            //Find thread with no pair
+            while(true) {
+
+                //find if thread is in range
+                if(!(i + 1 < threadCounters.size())) break;
+
+                ++i;
+                ThreadCounter nextthread = threadCounters.get(i);
+
+                //if has pair go next
+                if(nextthread.haspair) continue;
+
+                //if doesnt create pair and break while
+                else if (!nextthread.haspair){
+                    ThreadCountPair threadpair = new ThreadCountPair();
+                    threadsCountPair.add(threadpair);
+                    threadpair.thread1 = currentthread;
+                    threadpair.thread2 = nextthread;
+
+                    currentthread.haspair = true;
+                    nextthread.haspair = true;
+
+                    break;
+                }
+
             }
+
+            for(int j = 0; j < threadCounters.size(); j++) {
+                if(threadCounters.get(i).haspair) continue;
+
+                ThreadCountPair threadpair = new ThreadCountPair();
+                threadsCountPair.add(threadpair);
+                ThreadCounter thr = threadCounters.get(i);
+                threadpair.thread1 = thr;
+                thr.haspair = true;
+            }
+
         }
+
+        return threadsCountPair;
     }
 
     public void compare(int T1, int T2, int x){

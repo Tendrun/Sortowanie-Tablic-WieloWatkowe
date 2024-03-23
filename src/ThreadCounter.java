@@ -1,21 +1,16 @@
 public class ThreadCounter extends Thread {
-
-    public Boolean haspair = false;
     int[] array;
-    ThreadCounter(int[] array) {
+    String name;
+     public boolean finished = false;
+    public boolean haspair = false;
+    ThreadCounter(int[] array, String name) {
+        this.name = name;
         this.array = array;
     }
 
     @Override
     public void run() {
-        System.out.println("Thread is running");
-        for (int i = 0; i < array.length ; i++){
-            System.out.println(currentThread().getName() + " number = " + array[i]);
-        }
-    }
-
-    void setpair(Boolean haspair){
-        this.haspair = haspair;
+        System.out.println(name + " Thread is running");
     }
 
     //bubble sorting
@@ -37,13 +32,8 @@ public class ThreadCounter extends Thread {
 
             // If no two elements were
             // swapped by inner loop, then break
-            if (swapped == false)
+            if (!swapped)
                 break;
-        }
-
-
-        for (int k = 0; k < array.length; k++) {
-            System.out.println(currentThread().getName() + " number = " + array[k]);
         }
     }
 
