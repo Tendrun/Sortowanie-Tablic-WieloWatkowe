@@ -12,7 +12,7 @@ public class Main {
                 1,6,3, //T3
                 5,4,2  //T4
                 };
-        IntSorter firstask = new IntSorter(arr, 14);
+        IntSorter firstask = new IntSorter(arr, 6);
         firstask.StartSorting();
 
 

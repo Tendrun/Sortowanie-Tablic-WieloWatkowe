@@ -80,9 +80,9 @@ public class IntSorter {
 
 
         //Thread inner sort
-        for (int i = 0; i < threadCounters.size(); i++){
+        /*for (int i = 0; i < threadCounters.size(); i++){
             threadCounters.get(i).sortarray();
-        }
+        }*/
 
         //sort between threads
         for (int i = 0; i < threadsCountPair.size(); i++) {
@@ -126,69 +126,4 @@ public class IntSorter {
 
         Sort();
     }
-
-    //It counts between two threads
-    //and returns new ThreadCounter
-    ThreadCounter SortBetweenThreads(ThreadCounter T1, ThreadCounter T2) {
-
-
-        int[] array = new int[T1.array.length + T2.array.length];
-
-        int T1Pos = 0;
-        int T2Pos = 0;
-        int arrpos = 0;
-
-        ThreadCounter NewThreadCounter = new ThreadCounter(array, ("("+ T1.name + " " + T2.name + ")"));
-
-        while (true){
-
-
-
-            //compare two numbers
-            //when smaller
-            //when is out array length
-            //when is out numbers
-            if(T1.array[T1Pos] <= T2.array[T2Pos]) {
-                array[arrpos] = T1.array[T1Pos];
-                T1Pos++;
-            }
-
-            else if(T1.array[T1Pos] > T2.array[T2Pos]) {
-                array[arrpos] = T2.array[T2Pos];
-                T2Pos++;
-            }
-
-
-            ++arrpos;
-
-
-            //when one array is at the end
-            //copy second
-            if(T1Pos == T1.array.length) {
-                for (int i = arrpos; i < array.length; i++) {
-                    array[arrpos] = T2.array[T2Pos];
-
-                    arrpos++;
-                    T2Pos++;
-                }
-
-                return new ThreadCounter(array, ("("+ T1.name + " " + T2.name + ")"));
-            }
-
-            else if (T2Pos == T2.array.length) {
-
-                for (int i = arrpos; i < array.length; i++) {
-                    array[arrpos] = T1.array[T1Pos];
-
-                    arrpos++;
-                    T1Pos++;;
-                }
-
-                return new ThreadCounter(array, ("("+ T1.name + " " + T2.name + ")"));
-            }
-
-        }
-    }
-
-
 }

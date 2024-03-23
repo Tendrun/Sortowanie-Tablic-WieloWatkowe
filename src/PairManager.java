@@ -54,8 +54,4 @@ public class PairManager {
 
         return threadsCountPair;
     }
-
-    public void compare(int T1, int T2, int x){
-
-    }
 }
