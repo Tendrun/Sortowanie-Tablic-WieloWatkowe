@@ -47,8 +47,7 @@ public class IntSorter {
             firstindex += numbpersthread[i];
 
             threadCounters.add(new ThreadCounter(arrtothread, "Thread " + i));
-            threadCounters.get(i).start();
-
+            threadCounters.get(i).sortarray();
 
             for (int k = 0; k < arrtothread.length; k++) {
                 System.out.println(threadCounters.get(i).name + " number = " + arrtothread[k]);
@@ -76,13 +75,8 @@ public class IntSorter {
         //first of all create pairs
         List<ThreadCountPair> threadsCountPair = pairmanager.makepairs(threadCounters);
 
-        List<ThreadCounter> newthreadCounters = new ArrayList<ThreadCounter>();
-
-
-        //Thread inner sort
-        /*for (int i = 0; i < threadCounters.size(); i++){
-            threadCounters.get(i).sortarray();
-        }*/
+        List<ThreadCounter> newthreadcounters = new ArrayList<ThreadCounter>();
+        
 
         //sort between threads
         for (int i = 0; i < threadsCountPair.size(); i++) {
@@ -91,25 +85,35 @@ public class IntSorter {
             //if no pair skip
             if (threadsCountPair.get(i).thread2 == null) {
                 threadsCountPair.get(i).thread1.haspair = false;
-                newthreadCounters.add(threadsCountPair.get(i).thread1);
+                newthreadcounters.add(threadsCountPair.get(i).thread1);
                 continue;
             }
 
             //if has pair
-            ThreadCounter newthread = SortBetweenThreads(threadsCountPair.get(i).thread1, threadsCountPair.get(i).thread2);
+            threadsCountPair.get(i).newthread.start();
             threadsCountPair.get(i).thread1.interrupt();
             threadsCountPair.get(i).thread2.interrupt();
 
 
-            newthread.haspair = false;
-            newthreadCounters.add(newthread);
+            threadsCountPair.get(i).newthread.haspair = false;
+            newthreadcounters.add(threadsCountPair.get(i).newthread);
 
 
 
         }
 
+        for (Thread thread : newthreadcounters) {
+            try {
+                thread.join();
+
+            } catch (InterruptedException e){
+                System.out.println("blad");
+            }
+        }
+
+
         //new threads
-        threadCounters = new ArrayList<>(newthreadCounters);
+        threadCounters = new ArrayList<>(newthreadcounters);
 
         for (int i = 0; i < threadsCountPair.size(); i++) {
             for (int k = 0; k < threadCounters.get(i).array.length; k++) {
@@ -119,7 +123,7 @@ public class IntSorter {
 
 
         iteracjaliczenia++;
-        if(threadCounters.size() == 1){
+        if(threadCounters.size() == 1) {
             System.out.println("The end");
             return;
         }

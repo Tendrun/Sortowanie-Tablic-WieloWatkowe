@@ -1,15 +1,9 @@
 public class ThreadCountPair {
 
-    int[] array = null;
-
-    public void RunnAllthreads(){
-        SortBetweenThreads();
-    }
-
-
-    ThreadCountPair(ThreadCounter thread1, ThreadCounter thread2){
+    ThreadCountPair(ThreadCounter thread1, ThreadCounter thread2, ThreadCounter newthread){
         this.thread1 = thread1;
         this.thread2 = thread2;
+        this.newthread = newthread;
     }
 
     public ThreadCounter thread1;
@@ -19,7 +13,7 @@ public class ThreadCountPair {
 
     //It counts between two threads
     //and returns new ThreadCounter
-    ThreadCounter SortBetweenThreads() {
+    int[] SortBetweenThreads() {
 
 
         int[] array = new int[thread1.array.length + thread2.array.length];
@@ -28,7 +22,7 @@ public class ThreadCountPair {
         int thread2Pos = 0;
         int arrpos = 0;
 
-        ThreadCounter NewThreadCounter = new ThreadCounter(array, ("("+ thread1.name + " " + thread2.name + ")"), );
+        //ThreadCounter NewThreadCounter = new ThreadCounter(array, ("("+ thread1.name + " " + thread2.name + ")"), );
 
         while (true){
 
@@ -62,7 +56,7 @@ public class ThreadCountPair {
                     thread2Pos++;
                 }
 
-                return new ThreadCounter(array, ("("+ thread1.name + " " + thread2.name + ")"));
+                return array;
             }
 
             else if (thread2Pos == thread2.array.length) {
@@ -74,7 +68,7 @@ public class ThreadCountPair {
                     thread1Pos++;;
                 }
 
-                return new ThreadCounter(array, ("("+ thread1.name + " " + thread2.name + ")"));
+                return array;
             }
 
         }

@@ -8,7 +8,7 @@ public class PairManager {
         List<ThreadCountPair> threadsCountPair = new ArrayList<ThreadCountPair>();
 
         for(int i = 0; i < threadCounters.size(); i++) {
-            if (threadCounters.get(i).finished || threadCounters.get(i).haspair)
+            if (threadCounters.get(i).haspair)
                 continue;
 
 
@@ -26,8 +26,13 @@ public class PairManager {
                 if(nextthread.haspair) continue;
 
                 //if doesnt create pair and break while
-                else if (!nextthread.haspair){
-                    ThreadCountPair threadpair = new ThreadCountPair();
+                else {
+                    ThreadCounter childthread =
+                            new ThreadCounter(null, "("+ currentthread.name + " " + nextthread.name + ")");
+
+                    ThreadCountPair threadpair = new ThreadCountPair(currentthread, nextthread, childthread);
+                    childthread.currentthreadcountpair = threadpair;
+
                     threadsCountPair.add(threadpair);
                     threadpair.thread1 = currentthread;
                     threadpair.thread2 = nextthread;
@@ -42,12 +47,10 @@ public class PairManager {
 
             for(int j = 0; j < threadCounters.size(); j++) {
                 if(threadCounters.get(i).haspair) continue;
-
-                ThreadCountPair threadpair = new ThreadCountPair();
-                threadsCountPair.add(threadpair);
                 ThreadCounter thr = threadCounters.get(i);
-                threadpair.thread1 = thr;
+                ThreadCountPair threadpair = new ThreadCountPair(thr, null,null);
                 thr.haspair = true;
+                threadsCountPair.add(threadpair);
             }
 
         }

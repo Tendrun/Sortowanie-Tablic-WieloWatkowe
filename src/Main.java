@@ -2,9 +2,6 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-
-        long startTime = System.nanoTime();
-
         int[] arr = new int[]
                 {
                 7,5,3,4, //T1
@@ -12,7 +9,12 @@ public class Main {
                 1,6,3, //T3
                 5,4,2  //T4
                 };
-        IntSorter firstask = new IntSorter(arr, 6);
+
+        long startTime = System.nanoTime();
+        IntSorter firstask = new IntSorter(arr, 4);
+
+        firstask.StartSorting();
+
         firstask.StartSorting();
 
 

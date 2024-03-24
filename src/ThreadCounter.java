@@ -9,6 +9,12 @@ public class ThreadCounter extends Thread {
 
     ThreadCountPair currentthreadcountpair;
 
+    ThreadCounter(int[] array, String name) {
+        this.name = name;
+        this.array = array;
+    }
+
+
     ThreadCounter(int[] array, String name, ThreadCountPair currentthreadcountpair) {
         this.name = name;
         this.array = array;
@@ -25,7 +31,13 @@ public class ThreadCounter extends Thread {
 
     @Override
     public void run() {
-        currentthreadcountpair.SortBetweenThreads();
+        array = currentthreadcountpair.SortBetweenThreads();
+
+        for (int i = 0; i < array.length; i++) {
+            System.out.println("name = " + name + " number = " + array[i]);
+        }
+
+        finished = true;
     }
 
     //bubble sorting
