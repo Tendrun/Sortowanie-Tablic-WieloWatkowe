@@ -6,8 +6,7 @@ public class Main {
     public static void main(String[] args) {
 
         //Above size 1000 it is not sorting correctly
-        int[] arr = new int[2000];
-
+        int[] arr = new int[1999];
         Random random = new Random();
 
         for (int i = 0; i < arr.length; i++) {

@@ -8,7 +8,6 @@ public class ThreadCountPair {
 
     public ThreadCounter thread1;
     public ThreadCounter thread2;
-
     public ThreadCounter newthread;
 
     //It counts between two threads
@@ -25,9 +24,6 @@ public class ThreadCountPair {
         //ThreadCounter NewThreadCounter = new ThreadCounter(array, ("("+ thread1.name + " " + thread2.name + ")"), );
 
         while (true){
-
-
-
             //compare two numbers
             //when smaller
             //when is out array length
@@ -70,7 +66,6 @@ public class ThreadCountPair {
 
                 return array;
             }
-
         }
     }
 }

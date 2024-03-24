@@ -43,7 +43,7 @@ public class ThreadCounter extends Thread {
 
         array = currentthreadcountpair.SortBetweenThreads();
 
-        if(IntSorter.printcalculations){
+        if(IntSorter.printcalculations) {
             for (int i = 0; i < array.length; i++) {
                 System.out.println("name = " + name + " number = " + array[i]);
             }
