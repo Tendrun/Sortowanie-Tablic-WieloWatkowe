@@ -4,6 +4,9 @@ public class ThreadCounter extends Thread {
      public boolean finished = false;
     public boolean haspair = false;
 
+    public boolean innersorting = false;
+
+
     ThreadCounter T1;
     ThreadCounter T2;
 
@@ -31,10 +34,19 @@ public class ThreadCounter extends Thread {
 
     @Override
     public void run() {
+
+        if(innersorting){
+            sortarray();
+            innersorting = false;
+            return;
+        }
+
         array = currentthreadcountpair.SortBetweenThreads();
 
-        for (int i = 0; i < array.length; i++) {
-            System.out.println("name = " + name + " number = " + array[i]);
+        if(IntSorter.printcalculations){
+            for (int i = 0; i < array.length; i++) {
+                System.out.println("name = " + name + " number = " + array[i]);
+            }
         }
 
         finished = true;

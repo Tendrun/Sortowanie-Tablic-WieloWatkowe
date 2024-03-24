@@ -10,12 +10,14 @@ public class IntSorter {
     List<ThreadCounter> threadCounters;
     PairManager pairmanager;
 
+    static boolean printcalculations;
 
-    public IntSorter(int[] arr, int threadscount) {
+    public IntSorter(int[] arr, int threadscount, boolean printcalculations_) {
         array = arr;
         this.threadscount = threadscount;
         threadCounters = new ArrayList<ThreadCounter>();
         numbpersthread = SetEqualArray(arr.length, threadscount);
+        printcalculations = printcalculations_;
     }
 
     //sort thread equally per thread
@@ -47,11 +49,8 @@ public class IntSorter {
             firstindex += numbpersthread[i];
 
             threadCounters.add(new ThreadCounter(arrtothread, "Thread " + i));
-            threadCounters.get(i).sortarray();
-
-            for (int k = 0; k < arrtothread.length; k++) {
-                System.out.println(threadCounters.get(i).name + " number = " + arrtothread[k]);
-            }
+            threadCounters.get(i).innersorting = true;
+            threadCounters.get(i).start();
         }
 
 
@@ -102,12 +101,14 @@ public class IntSorter {
 
         }
 
+        //Wait for others threads to finnish job
+
         for (Thread thread : newthreadcounters) {
             try {
                 thread.join();
 
             } catch (InterruptedException e){
-                System.out.println("blad");
+                System.out.println("error");
             }
         }
 
@@ -115,16 +116,24 @@ public class IntSorter {
         //new threads
         threadCounters = new ArrayList<>(newthreadcounters);
 
-        for (int i = 0; i < threadsCountPair.size(); i++) {
-            for (int k = 0; k < threadCounters.get(i).array.length; k++) {
-                System.out.println(threadCounters.get(i).name + " number = " + threadCounters.get(i).array[k]);
+        if(printcalculations) {
+            for (int i = 0; i < threadsCountPair.size(); i++) {
+                for (int k = 0; k < threadCounters.get(i).array.length; k++) {
+                    System.out.println(threadCounters.get(i).name + " number = " + threadCounters.get(i).array[k]);
+                }
             }
         }
-
 
         iteracjaliczenia++;
         if(threadCounters.size() == 1) {
             System.out.println("The end");
+
+            array = newthreadcounters.get(0).array;
+
+            for (int i = 0; i < array.length; i++) {
+                System.out.println("number = " + array[i]);
+            }
+
             return;
         }
 
