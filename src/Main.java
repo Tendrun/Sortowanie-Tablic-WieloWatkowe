@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
 
         //Above size 1000 it is not sorting correctly
-        int[] arr = new int[1999];
+        int[] arr = new int[10000];
         Random random = new Random();
 
         for (int i = 0; i < arr.length; i++) {
@@ -16,7 +16,7 @@ public class Main {
         }
 
         long startTime = System.nanoTime();
-        IntSorter firstask = new IntSorter(arr, 4, false);
+        IntSorter firstask = new IntSorter(arr, 4, false, 1);
 
         firstask.StartSorting();
 

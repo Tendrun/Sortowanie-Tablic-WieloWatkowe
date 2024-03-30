@@ -1,8 +1,16 @@
+import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.*;
 
 public class IntSorter {
+
+    //UI
+    MultiThreadProgressBar multithreadprogressbar;
+    int delaytaskms;
+
     //Threads
     int[] array;
     int threadscount;
@@ -12,12 +20,13 @@ public class IntSorter {
 
     static boolean printcalculations;
 
-    public IntSorter(int[] arr, int threadscount, boolean printcalculations_) {
+    public IntSorter(int[] arr, int threadscount, boolean printcalculations_, int delaytaskms) {
         array = arr;
         this.threadscount = threadscount;
         threadCounters = new ArrayList<ThreadCounter>();
         numbpersthread = SetEqualArray(arr.length, threadscount);
         printcalculations = printcalculations_;
+        this.delaytaskms = delaytaskms;
     }
 
     //sort thread equally per thread
@@ -43,14 +52,42 @@ public class IntSorter {
     //Give them numbers to count
     int firstindex = 0;
     public void StartSorting() {
+
+        //create UI
+
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    MultiThreadProgressBar frame = new MultiThreadProgressBar(threadscount);
+                    multithreadprogressbar = frame;
+                    frame.setVisible(true);
+                }
+            });
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace(System.out);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace(System.out);
+        }
+
+
         for (int i = 0; i < threadscount; i++) {
 
             int[] arrtothread = Arrays.copyOfRange(array, firstindex, firstindex + numbpersthread[i]);
             firstindex += numbpersthread[i];
 
-            threadCounters.add(new ThreadCounter(arrtothread, "Thread " + i));
+            threadCounters.add(new ThreadCounter(arrtothread, "Thread " + i, multithreadprogressbar, i, delaytaskms));
             threadCounters.get(i).innersorting = true;
             threadCounters.get(i).start();
+        }
+
+        for (ThreadCounter thread : threadCounters) {
+            try {
+                thread.join();
+
+            } catch (InterruptedException e){
+                System.out.println("error");
+            }
         }
 
 

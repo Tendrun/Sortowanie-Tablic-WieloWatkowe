@@ -1,7 +1,7 @@
 public class ThreadCounter extends Thread {
     int[] array;
     String name;
-     public boolean finished = false;
+    public boolean finished = false;
     public boolean haspair = false;
 
     public boolean innersorting = false;
@@ -12,9 +12,24 @@ public class ThreadCounter extends Thread {
 
     ThreadCountPair currentthreadcountpair;
 
+
+    MultiThreadProgressBar multithreadprogressbar;
+    int delaytaskms = 0;
+    int threadindex;
+
     ThreadCounter(int[] array, String name) {
         this.name = name;
         this.array = array;
+    }
+
+
+    ThreadCounter(int[] array, String name, MultiThreadProgressBar multithreadprogressbar,
+                  int threadindex ,int delaytaskms) {
+        this.name = name;
+        this.array = array;
+        this.multithreadprogressbar = multithreadprogressbar;
+        this.delaytaskms = delaytaskms;
+        this.threadindex = threadindex;
     }
 
 
@@ -61,7 +76,6 @@ public class ThreadCounter extends Thread {
             for (j = 0; j < array.length - i - 1; j++) {
                 if (array[j] > array[j + 1]) {
 
-                    // Swap arr[j] and arr[j+1]
                     temp = array[j];
                     array[j] = array[j + 1];
                     array[j + 1] = temp;
@@ -69,11 +83,27 @@ public class ThreadCounter extends Thread {
                 }
             }
 
+            float progress = (float)i/array.length;
+
+            int progresss_int = (int) (progress * 100);
+
+            multithreadprogressbar.ThreadIncreaseProgress(threadindex, progresss_int);
+
+            try {
+                sleep(delaytaskms);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
             // If no two elements were
             // swapped by inner loop, then break
-            if (!swapped)
+            if (!swapped){
+                multithreadprogressbar.ThreadIncreaseProgress(threadindex, 100);
                 break;
+            }
         }
+
     }
 
 }
