@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +14,6 @@ public class IntSorter {
     int[] array;
     int threadscount;
     int[] numbpersthread;
-    List<ThreadCounter> threadCounters;
     PairManager pairmanager;
 
     static boolean printcalculations;
@@ -23,7 +21,6 @@ public class IntSorter {
     public IntSorter(int[] arr, int threadscount, boolean printcalculations_, int delaytaskms) {
         array = arr;
         this.threadscount = threadscount;
-        threadCounters = new ArrayList<ThreadCounter>();
         numbpersthread = SetEqualArray(arr.length, threadscount);
         printcalculations = printcalculations_;
         this.delaytaskms = delaytaskms;
@@ -51,10 +48,9 @@ public class IntSorter {
     //Create threads
     //Give them numbers to count
     int firstindex = 0;
-    public void StartSorting() {
+    public List<ThreadCounter> StartSorting() {
 
         //create UI
-
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
@@ -71,17 +67,20 @@ public class IntSorter {
         }
 
 
+        List<BubbleSortingThread> bubbleSortingThreads = new ArrayList<BubbleSortingThread>();
+
+
+        //Inner sorting
         for (int i = 0; i < threadscount; i++) {
 
             int[] arrtothread = Arrays.copyOfRange(array, firstindex, firstindex + numbpersthread[i]);
             firstindex += numbpersthread[i];
 
-            threadCounters.add(new ThreadCounter(arrtothread, "Thread " + i, multithreadprogressbar, i, delaytaskms));
-            threadCounters.get(i).innersorting = true;
-            threadCounters.get(i).start();
+            bubbleSortingThreads.add(new BubbleSortingThread(arrtothread, "Thread " + i, multithreadprogressbar, i, delaytaskms));
+            bubbleSortingThreads.get(i).start();
         }
 
-        for (ThreadCounter thread : threadCounters) {
+        for (BubbleSortingThread thread : bubbleSortingThreads) {
             try {
                 thread.join();
 
@@ -90,10 +89,15 @@ public class IntSorter {
             }
         }
 
+        List<ThreadCounter> threadCounters = new ArrayList<ThreadCounter>();
+
+        for (int i = 0; i < threadscount; i++) {
+            threadCounters.add(new ThreadCounter(bubbleSortingThreads.get(i).array, "Thread " + i));
+        }
 
         pairmanager = new PairManager();
 
-        Sort();
+        return threadCounters;
     }
 
 
@@ -104,14 +108,15 @@ public class IntSorter {
     //make pairs
     //every recurrence
     //decrease number threads
-    public void Sort(){
+    public void Sort(List<ThreadCounter> threadCounters){
         System.out.println("---------------------------------------------------------------------------");
         System.out.println("Iteration = " + iteracjaliczenia);
 
         //first of all create pairs
         List<ThreadCountPair> threadsCountPair = pairmanager.makepairs(threadCounters);
 
-        List<ThreadCounter> newthreadcounters = new ArrayList<ThreadCounter>();
+        List<ThreadCounter> newthreadcounters = new ArrayList<>();
+
         
 
         //sort between threads
@@ -174,6 +179,6 @@ public class IntSorter {
             return;
         }
 
-        Sort();
+        Sort(newthreadcounters);
     }
 }

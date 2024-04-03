@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Random;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -16,9 +17,12 @@ public class Main {
         }
 
         long startTime = System.nanoTime();
-        IntSorter firstask = new IntSorter(arr, 4, false, 1);
 
-        firstask.StartSorting();
+
+        IntSorter firstask = new IntSorter(arr, 4, false, 1);
+        List<ThreadCounter> threadCounters = firstask.StartSorting();
+        firstask.Sort(threadCounters);
+
 
         long endTime = System.nanoTime();
         long durationNano = (endTime - startTime);
